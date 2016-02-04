@@ -1,4 +1,4 @@
-require $   = require('jquery');
+var $   = require('jquery');
 
 /**
  * Packs the given requests into the batch and returns batch contents.
