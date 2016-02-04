@@ -9,7 +9,7 @@ var pack = function (data, boundary) {
     var body = [];
 
     $.each(data, function (i, d) {
-        var t = d.type.toUpperCase(), noBody = ['GET', 'DELETE'];
+        var t = d.type.toUpperCase(), noBody = ['GET', 'DELETE'], idx;
 
         body.push('--' + boundary);
         body.push('Content-Type: application/http; msgtype=request', '');
@@ -21,6 +21,17 @@ var pack = function (data, boundary) {
         }
 
         body.push('Host: ' + location.host);
+
+        // add in custom headers to the batch if there are any
+        if (d.hasOwnProperty('headers')) {
+            for (idx in d.headers) {
+                if (!d.headers.hasOwnProperty(idx)) {
+                    continue;
+                }
+                body.push(idx + ': ' + d.headers[idx]);
+            }
+        }
+
         body.push('', d.data ? JSON.stringify(d.data) : '');
     });
 
