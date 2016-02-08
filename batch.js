@@ -80,6 +80,7 @@ module.exports = {
             type: 'POST',
             url: params.url,
             dataType: 'json',
+            headers: params.headers,
             data: pack(params.data, boundary),
             contentType: 'multipart/mixed; boundary="' + boundary + '"',
             complete: params.complete ?
