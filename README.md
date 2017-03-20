@@ -52,3 +52,25 @@ Batch.js depends on jQuery >= 1.5.x (although, this dependency can easily be eli
 ## Known issues ##
 
 Currently Batch.js only supports ```application/json``` as content type (and therefore, enforces it when sending the request and receiving the response).
+
+For SAP, you must set the X-CSRF-Token before running any change request.  To do that, you must add in a X-CSRF-Token: Fetch to your request header, and use the token retrieved in future post, put or delete requests. 
+
+here's a sample of how I set this token:
+
+  $.ajax({
+      method: "GET",
+      // this should be any nondestructive GET url from your service.
+      url: "/sap/opu/odata/sap/$metadata",
+      beforeSend: function (request) {
+        request.setRequestHeader("X-CSRF-Token", "Fetch");
+      }
+    }).then(function (data, status, xhr) {
+      var token = xhr.getResponseHeader("X-CSRF-Token");
+      console.log(xhr.getResponseHeader("X-CSRF-Token"));
+      // this is what you would use to set up any future requests.
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': token
+        }
+      });
+    });
